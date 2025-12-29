@@ -1,0 +1,38 @@
+name: Gatling Performance Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  gatling-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2
+
+      - name: Run Gatling tests
+        run: mvn clean gatling:test
+
+      - name: Upload Gatling Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gatling-report
+          path: target/gatling
