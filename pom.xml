@@ -19,22 +19,15 @@
     <dependencies>
         <!-- Gatling -->
         <dependency>
-            <groupId>io.gatling</groupId>
-            <artifactId>gatling-app</artifactId>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
             <version>${gatling.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.gatling</groupId>
-            <artifactId>gatling-core</artifactId>
-            <version>${gatling.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.gatling</groupId>
-            <artifactId>gatling-http</artifactId>
+            <artifactId>gatling-test-framework</artifactId>
             <version>${gatling.version}</version>
             <scope>test</scope>
         </dependency>
@@ -42,19 +35,33 @@
 
     <build>
         <plugins>
-            <!-- Gatling Maven Plugin -->
+
+            <!-- ✅ CRITICAL: Scala compiler -->
             <plugin>
-                <groupId>io.gatling</groupId>
-                <artifactId>gatling-maven-plugin</artifactId>
-                <version>4.10.2</version>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>4.9.2</version>
                 <executions>
                     <execution>
+                        <id>compile-scala</id>
+                        <phase>test-compile</phase>
                         <goals>
-                            <goal>test</goal>
+                            <goal>testCompile</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Gatling plugin -->
+            <plugin>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-maven-plugin</artifactId>
+                <version>4.10.2</version>
+                <configuration>
+                    <simulationClass>simulations.GoogleSimulation</simulationClass>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
