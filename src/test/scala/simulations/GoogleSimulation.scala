@@ -8,20 +8,15 @@ class GoogleSimulation extends Simulation {
 
   val httpProtocol = http
     .baseUrl("https://www.google.com")
-    .acceptHeader("text/html")
-    .userAgentHeader("Gatling Load Test")
 
-  val scn = scenario("Google Home Page Load Test")
+  val scn = scenario("Google Home Page Test")
     .exec(
-      http("Open Google Home Page")
+      http("Open Google")
         .get("/")
         .check(status.is(200))
     )
-    .pause(2)
 
   setUp(
-    scn.inject(
-      rampUsers(10).during(10.seconds)
-    )
+    scn.inject(atOnceUsers(1))
   ).protocols(httpProtocol)
 }
